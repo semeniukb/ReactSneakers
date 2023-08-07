@@ -162,6 +162,12 @@ body {
   &:active {
     background: darken(#9DD558, 5%);
   }
+  &:disabled {
+    background-color: #bebebe;
+    cursor: default;
+    transition: opacity 0.15s ease-in-out;
+    animation: button-basket-loading 0.5s ease-in-out infinite;
+  }
 }
 
 .wrapper {
@@ -204,5 +210,17 @@ body {
     font-size: 14px;
     line-height: 17px;
     padding: 14px 0;
+  }
+}
+
+@keyframes button-basket-loading {
+  0% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.8;
+  }
+  100% {
+    opacity: 1;
   }
 }

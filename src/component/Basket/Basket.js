@@ -1,8 +1,33 @@
 import plus from "../../assets/plus.svg";
 import arrow from "../../assets/arrow.svg";
+import {EmptyBasket} from "./EmptyBasket";
+import {useContext, useState} from "react";
+import AppContext from "../../context";
+import axios from "axios";
 
-function Basket({ onBasketClose, basketItem, setBasketItem, onDeleteBasketItem }) {
+function Basket({ onBasketClose, onDeleteBasketItem }) {
+    const [isOrderComplete, setIsOrderComplete] = useState(false)
+    const [isOrderId, setIsOrderId] = useState(null)
+    const [isLoading, setIsLoading] = useState(false)
 
+    const { setBasketItem, basketItem, URL1, URL2 } = useContext(AppContext);
+    const onOrderClick = async () => {
+        try {
+            setIsLoading(true)
+            const {data} = await axios.post(URL2 + "/orders", {basketItem})
+            setIsOrderId(data.id)
+            setIsOrderComplete(true)
+            setBasketItem([])
+
+            for(let item of basketItem) {
+               await axios.delete(URL1 + `/card/${item.id}`)
+            }
+
+        } catch (err) {
+            alert("Something went wrong")
+        }
+        setIsLoading(false)
+    }
     return (
         <section className="basket__overlay">
             <div className="basket__body">
@@ -53,21 +78,17 @@ function Basket({ onBasketClose, basketItem, setBasketItem, onDeleteBasketItem }
                                 <b>1074 руб. </b>
                             </li>
                         </ul>
-                        <button className="greenButton">
+                        <button disabled={isLoading} className="greenButton" onClick={onOrderClick}>
                             Оформить заказ
                             <img src={arrow} alt="arrow"/>
                         </button>
                     </div>
-                ) : (
-                    <div style={{display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", height: "100%"}} >
-                        <img
-                            src={process.env.PUBLIC_URL + `/img/empty-cart.jpg`}
-                            alt="empty"
-                        />
-                        <h2>Корзина пустая</h2>
-                        <p style={{textAlign: "center", marginTop: "20px", opacity: "0.4"}}>Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.</p>
-                    </div>
-                )}
+                ) :
+                <EmptyBasket image={isOrderComplete ? "/img/complete-order.jpg" :`/img/empty-cart.jpg`}
+                             title={isOrderComplete ? `Ваш заказ #${isOrderId} скоро будет передан курьерской доставке` : 'Добавьте хотя бы одну пару кроссовок, чтобы сделать заказ.'}
+                             header={isOrderComplete ? "Заказ оформлен!" :'Корзина пустая'}
+                             ordered={isOrderComplete}
+                />}
             </div>
         </section>
     );

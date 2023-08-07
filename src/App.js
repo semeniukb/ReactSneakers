@@ -72,8 +72,8 @@ function App() {
 
   return (
  <div className="wrapper">
-     <AppContext.Provider value={{favorites, addItemToBasket, addFavorite, isItemAdded, basketItem, loadingCards, data, findSneakers, setFindSneaker }}>
-         {basketOpen && <Basket onDeleteBasketItem={onDeleteBasketItem} setBasketItem={setBasketItem} basketItem={basketItem} onBasketClose={() => setBasketOpen(false)}/>}
+     <AppContext.Provider value={{URL1, URL2, favorites, setBasketOpen, addItemToBasket, addFavorite, isItemAdded, basketItem, setBasketItem, loadingCards, data, findSneakers, setFindSneaker }}>
+         {basketOpen && <Basket onDeleteBasketItem={onDeleteBasketItem} onBasketClose={() => setBasketOpen(false)}/>}
          <Header onBasketOpen={() => setBasketOpen(true)}/>
          <main>
              <Routes>
