@@ -1,22 +1,12 @@
 import search from "../assets/search.svg";
 import Card from "../component/Card/Card";
-import Skeleton from "../component/Skeleton/Skeleton";
-import styles from "../component/Card/Card.module.scss";
 import AppContext from "../context";
 import {useContext} from "react";
+import {renderSkeleton} from "../utils/renderSkeleton";
 
 function Home () {
-    const { findSneakers, setFindSneaker, addItemToBasket, data, addFavorite, basketItem, loadingCards } = useContext(AppContext)
-    const renderSkeleton = () => {
-        return (
-            [...Array(8)].map(elem => {
-                return (
-                    <div className={styles.main__card}>
-                        <Skeleton/>
-                    </div>)
-            })
-        )
-    }
+    const { findSneakers, setFindSneaker, addItemToBasket, data, addFavorite, loadingCards } = useContext(AppContext)
+
     const renderCards = () => {
        return data?.filter(item => item.title.toLowerCase().includes(findSneakers.toLowerCase())).map(item => (
                 <Card key={item.imageURL}
@@ -29,7 +19,6 @@ function Home () {
             )
         )
     }
-
 
     return (
         <div className="main__wrapper">

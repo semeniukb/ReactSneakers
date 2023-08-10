@@ -1,20 +1,21 @@
 import plus from "../../assets/plus.svg";
 import arrow from "../../assets/arrow.svg";
 import {EmptyBasket} from "./EmptyBasket";
-import {useContext, useState} from "react";
-import AppContext from "../../context";
+import {useState} from "react";
 import axios from "axios";
+import {useCountPrice} from "../../hooks/useCountPrice";
+import styles from "./Basket.module.scss"
 
-function Basket({ onBasketClose, onDeleteBasketItem }) {
+function Basket({ onBasketClose, onDeleteBasketItem, URL1, URL2, opened }) {
     const [isOrderComplete, setIsOrderComplete] = useState(false)
     const [isOrderId, setIsOrderId] = useState(null)
     const [isLoading, setIsLoading] = useState(false)
 
-    const { setBasketItem, basketItem, URL1, URL2 } = useContext(AppContext);
+    const { setBasketItem, basketItem, price } = useCountPrice()
     const onOrderClick = async () => {
         try {
             setIsLoading(true)
-            const {data} = await axios.post(URL2 + "/orders", {basketItem})
+            const {data} = await axios.post(URL2 + "/orders", {items: basketItem})
             setIsOrderId(data.id)
             setIsOrderComplete(true)
             setBasketItem([])
@@ -29,35 +30,35 @@ function Basket({ onBasketClose, onDeleteBasketItem }) {
         setIsLoading(false)
     }
     return (
-        <section className="basket__overlay">
-            <div className="basket__body">
-                <div className="basket__header">
+        <section className={`${styles.basket__overlay} ${opened ? styles.basket__overlayVisible : ''}`}>
+            <div className={styles.basket__body}>
+                <div className={styles.basket__header}>
                     <h2>Корзина</h2>
-                    <button className="basket__close-btn" onClick={onBasketClose}>
+                    <button className={styles.basket__close_btn} onClick={onBasketClose}>
                         <img width={14} height={14} src={plus} alt="Close"/>
                     </button>
                 </div>
                 {basketItem.length ? (
-                    <div className="basket__elements">
-                        <div className="basket__wrapper">
+                    <div className={styles.basket__elements}>
+                        <div className={styles.basket__wrapper}>
                             {basketItem?.map((item) => {
                                 return (
-                                    <div key={item.image} className="basket__card">
-                                        <div className="basket__card-box">
+                                    <div key={item.image} className={styles.basket__card}>
+                                        <div>
                                             <img
-                                                className="basket__card-img"
+                                                className={styles.basket__card_img}
                                                 src={process.env.PUBLIC_URL + `${item.image}`}
                                                 alt="Sneakers"
                                             />
                                         </div>
                                         <div>
                                             <p>{item.title}</p>
-                                            <span>{item.price}</span>
+                                            <span>{item.price?.toFixed(2)} USD</span>
                                         </div>
                                         <div>
                                             <button
                                                 onClick={() => onDeleteBasketItem(item?.id)}
-                                                className="basket__close-btn"
+                                                className={styles.basket__close_btn}
                                             >
                                                 <img width={14} height={14} src={plus} alt="Close"/>
                                             </button>
@@ -66,16 +67,16 @@ function Basket({ onBasketClose, onDeleteBasketItem }) {
                                 );
                             })}
                         </div>
-                        <ul className="basket__footer">
-                            <li className="basket__footer-margin">
+                        <ul className={styles.basket__footer}>
+                            <li>
                                 <span>Итого: </span>
                                 <div></div>
-                                <b>21 498 руб. </b>
+                                <b>{price.toFixed(2)} USD</b>
                             </li>
                             <li>
-                                <span>Налог 5%: </span>
+                                <span>VAT 5%: </span>
                                 <div></div>
-                                <b>1074 руб. </b>
+                                <b>{(price * 0.05).toFixed(2)} USD</b>
                             </li>
                         </ul>
                         <button disabled={isLoading} className="greenButton" onClick={onOrderClick}>

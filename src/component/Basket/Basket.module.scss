@@ -1,3 +1,143 @@
+.basket {
+  &__header {
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+    button {
+      flex: none;
+    }
+  }
+  &__overlay {
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: 1;
+    background-color: rgba(0,0,0, 0.5);
+    overflow: auto; /* Add this line */
+    visibility: hidden;
+    transition: opacity 0.3s ease-in-out, visibility 0.3s ease-in-out;
+    opacity: 0;
+  }
+
+  &__overlayVisible {
+    visibility: visible;
+    opacity: 1;
+    overflow: hidden;
+    .basket__body {
+      transform: translateX(0%);
+      transition: transform 0.3s ease-in-out;
+    }
+  }
+  &__body {
+    position: absolute;
+    display: flex;
+    flex-direction: column;
+    right: 0;
+    padding: 30px;
+    background-color: #FFFFFF;
+    width: 30%;
+    height: 100%;
+    transform: translateX(100%);
+    transition: transform 0.3s ease-in-out;
+    .greenButton {
+      position: relative;
+      transition: transform 0.1s ease-in-out;
+      img {
+        position: absolute;
+        right: 50px;
+        top: 20px;
+
+      }
+      &:hover {
+        img {
+          transform: translateX(5px);
+        }
+      }
+    }
+  }
+  &__elements {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+  }
+  &__wrapper {
+    margin-top: 30px;
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    gap: 20px;
+    overflow: auto;
+    margin-bottom: 40px;
+  }
+  &__close_btn {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    flex: 1 0 auto;
+    width: 32px;
+    height: 32px;
+    background: #FFFFFF;
+    border: 1px solid #F2F2F2;
+    border-radius: 8px;
+    img {
+      opacity: 0.7;
+      transform: rotate(45deg);
+    }
+    &:hover {
+      border: 1px solid #DBDBDB;
+    }
+    &:hover img {
+      opacity: 1;
+    }
+  }
+  &__card {
+    padding: 20px;
+    overflow: hidden;
+    display: flex;
+    gap: 15px;
+    align-items: center;
+    justify-content: space-between;
+    border: 1px solid #F3F3F3;
+    border-radius: 20px;
+    width: 100%;
+    min-height: 120px;
+    p {
+      margin-bottom: 10px;
+      font-weight: 400;
+      font-size: 14px;
+      line-height: 17px;
+    }
+    span {
+      font-weight: 700;
+      font-size: 14px;
+      line-height: 17px;
+    }
+    &_img {
+      width: 70px;
+      height: 70px;
+    }
+  }
+  &__footer {
+
+    li {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      margin-bottom: 20px;
+      div {
+        position: relative;
+        top: -3px;
+        margin: 0 5px;
+        flex: 1;
+        border-bottom: 1px dashed #DFDFDF;
+      }
+    }
+  }
+}
+
 .emptyBasket {
   display: flex;
   flex-direction: column;

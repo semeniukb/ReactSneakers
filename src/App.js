@@ -1,5 +1,4 @@
 import React, { useEffect } from 'react';
-import Card from "./component/Card/Card";
 import Header from "./component/Header/Header";
 import Basket from "./component/Basket/Basket";
 import axios from "axios";
@@ -7,6 +6,7 @@ import { Route, Routes } from "react-router-dom"
 import Home from "./pages/Home";
 import Favorite from "./pages/Favorite";
 import AppContext from "./context";
+import Orders from "./pages/Orders";
 
 function App() {
     const [basketOpen, setBasketOpen] = React.useState(false)
@@ -20,15 +20,19 @@ function App() {
     const URL2 = "https://648630b3a795d24810b7c9e6.mockapi.io";
 
     useEffect(() => {
-        (async function fetchData  () {
-            const responceItems = await axios.get(URL1 + "/items")
-            const responceCard = await axios.get(URL1 + "/card")
-            const responceFavorite = await axios.get(URL2 + "/favorite")
-
-            setBasketItem(responceCard.data)
-            setFavorites(responceFavorite.data)
-            setData(responceItems.data)
-            setLoadingCards(false);
+        (async () => {
+               try {
+                   const responceItems = await axios.get(URL1 + "/items")
+                   const responceCard = await axios.get(URL1 + "/card")
+                   const responceFavorite = await axios.get(URL2 + "/favorite")
+                   setBasketItem(responceCard.data)
+                   setFavorites(responceFavorite.data)
+                   setData(responceItems.data)
+                   setLoadingCards(false);
+               } catch (e) {
+                   alert("Can't show this page, please try again")
+                   console.error(e)
+               }
         })();
         }, [])
 
@@ -72,13 +76,18 @@ function App() {
 
   return (
  <div className="wrapper">
-     <AppContext.Provider value={{URL1, URL2, favorites, setBasketOpen, addItemToBasket, addFavorite, isItemAdded, basketItem, setBasketItem, loadingCards, data, findSneakers, setFindSneaker }}>
-         {basketOpen && <Basket onDeleteBasketItem={onDeleteBasketItem} onBasketClose={() => setBasketOpen(false)}/>}
+     <AppContext.Provider value={{
+            favorites, setBasketOpen, addItemToBasket,
+         addFavorite, isItemAdded, basketItem, setBasketItem,
+         loadingCards, data, findSneakers, setFindSneaker,
+     }}>
+         <Basket opened={basketOpen} onDeleteBasketItem={onDeleteBasketItem} URL1={URL1} URL2={URL2} onBasketClose={() => setBasketOpen(false)}/>
          <Header onBasketOpen={() => setBasketOpen(true)}/>
          <main>
              <Routes>
                  <Route path='/' exact element={ <Home /> } />
                  <Route path='/favorites' exact element={ <Favorite/> } />
+                 <Route path='/orders' exact element={ <Orders URL2={URL2}/> } />
              </Routes>
          </main>
      </AppContext.Provider>
