@@ -15,6 +15,7 @@ function Home () {
                       image={item.imageURL}
                       title={item.title}
                       price={item.price}
+                      id={item.id}
                 />
             )
         )

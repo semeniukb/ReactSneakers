@@ -70,8 +70,8 @@ function App() {
         axios.delete(URL1 + `/card/${id}`)
     }
 
-    const isItemAdded = (image) => {
-      return basketItem.some(elem => elem.image === image)
+    const isItemAdded = (id) => {
+      return basketItem.some(elem => elem.parentId === id)
     }
 
   return (

@@ -5,12 +5,12 @@ import btnPlus from "../../assets/btn-plus.svg";
 import btnChecked from "../../assets/btn-checked.svg";
 import styles from "./Card.module.scss"
 import AppContext from "../../context";
-function Card({ title, price, image, addItemToBasket, addFavorite, itemId, favorite = false}) {
+function Card({ title, price, id, image, addItemToBasket, addFavorite, itemId, favorite = false}) {
     const { isItemAdded } = useContext(AppContext)
     const [isFavorite, setIsFavorite] = React.useState(favorite)
 
     const handleButtonPlus = () => {
-        addItemToBasket({title, image, price})
+        addItemToBasket({title, image, price, parentId: id})
     }
     const handleFavorite = () => {
         setIsFavorite(!isFavorite)
@@ -26,7 +26,7 @@ function Card({ title, price, image, addItemToBasket, addFavorite, itemId, favor
                         <p>Цена</p>
                         <span>{price?.toFixed(2)} USD</span>
                     </div>
-                    {addItemToBasket && <img onClick={handleButtonPlus} className={styles.btn} src={isItemAdded(image) ? btnChecked : btnPlus} alt="Plus"/>}
+                    {addItemToBasket && <img onClick={handleButtonPlus} className={styles.btn} src={isItemAdded(id) ? btnChecked : btnPlus} alt="Plus"/>}
                 </div>
             </div>
 
